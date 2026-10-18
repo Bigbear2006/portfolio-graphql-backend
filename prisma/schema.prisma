@@ -86,7 +86,7 @@ model Company {
 model Experience {
   id          Int       @id @default(autoincrement())
   companyId   Int
-  position        String
+  position    String
   description String
   startDate   DateTime  @db.Date
   endDate     DateTime? @db.Date
@@ -98,17 +98,17 @@ model Experience {
 }
 
 model Project {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
   description String?
-  problem String?
-  solution String?
+  problem     String?
+  solution    String?
   url         String?
-  type ProjectType
+  type        ProjectType
   github      String?
-  role Role
+  role        Role
   profileId   Int
-  profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile     Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@index([profileId])
 }
