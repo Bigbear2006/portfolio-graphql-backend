@@ -1,0 +1,114 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["relationJoins"]
+}
+
+generator nestgraphql {
+  provider   = "prisma-nestjs-graphql"
+  output     = "../src/generated"
+  configFile = "./nestgraphql.config.mjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProjectType {
+  PET
+  COMMERCIAL
+  HACKATHON
+}
+
+enum Role {
+  SOLO
+  MAINTENANCE
+  TEAM
+}
+
+model Profile {
+  id            Int               @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  jobTitle      String
+  description   String
+  createdAt     DateTime          @default(now())
+  resources     ProfileResource[]
+  skills        Skill[]
+  experience    Experience[]
+  projects      Project[]
+  profileSkills ProfileSkill[]
+
+  @@unique([firstName, lastName])
+}
+
+model Resource {
+  id               Int               @id @default(autoincrement())
+  name             String            @unique
+  profileResources ProfileResource[]
+}
+
+model ProfileResource {
+  id         Int      @id @default(autoincrement())
+  resourceId Int
+  profileId  Int
+  url        String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([resourceId, profileId])
+}
+
+model Skill {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  profileSkills ProfileSkill[]
+  profile       Profile?       @relation(fields: [profileId], references: [id])
+  profileId     Int?
+}
+
+model ProfileSkill {
+  id        Int     @id @default(autoincrement())
+  skillId   Int
+  profileId Int
+  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([skillId, profileId])
+}
+
+model Company {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  experiences Experience[]
+}
+
+model Experience {
+  id          Int       @id @default(autoincrement())
+  companyId   Int
+  position        String
+  description String
+  startDate   DateTime  @db.Date
+  endDate     DateTime? @db.Date
+  profileId   Int
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, profileId])
+}
+
+model Project {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  problem String?
+  solution String?
+  url         String?
+  type ProjectType
+  github      String?
+  role Role
+  profileId   Int
+  profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}

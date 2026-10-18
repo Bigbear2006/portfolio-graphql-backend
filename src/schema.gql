@@ -1,0 +1,125 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Company {
+  _count: CompanyCount!
+  experiences: [Experience!]!
+  id: ID!
+  name: String!
+}
+
+type CompanyCount {
+  experiences: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Experience {
+  company: Company!
+  companyId: Int!
+  description: String!
+  endDate: DateTime
+  id: ID!
+  position: String!
+  profile: Profile!
+  profileId: Int!
+  startDate: DateTime!
+}
+
+type Profile {
+  _count: ProfileCount!
+  createdAt: DateTime!
+  description: String!
+  experience: [Experience!]!
+  firstName: String!
+  id: ID!
+  jobTitle: String!
+  lastName: String!
+  profileSkills: [ProfileSkill!]!
+  projects: [Project!]!
+  resources: [ProfileResource!]!
+  skills: [Skill!]!
+}
+
+type ProfileCount {
+  experience: Int!
+  profileSkills: Int!
+  projects: Int!
+  resources: Int!
+  skills: Int!
+}
+
+type ProfileResource {
+  id: ID!
+  profile: Profile!
+  profileId: Int!
+  resource: Resource!
+  resourceId: Int!
+  url: String!
+}
+
+type ProfileSkill {
+  id: ID!
+  profile: Profile!
+  profileId: Int!
+  skill: Skill!
+  skillId: Int!
+}
+
+type Project {
+  description: String
+  github: String
+  id: ID!
+  name: String!
+  problem: String
+  profile: Profile!
+  profileId: Int!
+  role: Role!
+  solution: String
+  type: ProjectType!
+  url: String
+}
+
+enum ProjectType {
+  COMMERCIAL
+  HACKATHON
+  PET
+}
+
+type Query {
+  profile: Profile!
+}
+
+type Resource {
+  _count: ResourceCount!
+  id: ID!
+  name: String!
+  profileResources: [ProfileResource!]!
+}
+
+type ResourceCount {
+  profileResources: Int!
+}
+
+enum Role {
+  MAINTENANCE
+  SOLO
+  TEAM
+}
+
+type Skill {
+  _count: SkillCount!
+  id: ID!
+  name: String!
+  profile: Profile
+  profileId: Int
+  profileSkills: [ProfileSkill!]!
+}
+
+type SkillCount {
+  profileSkills: Int!
+}
