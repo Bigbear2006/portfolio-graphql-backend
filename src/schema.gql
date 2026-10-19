@@ -39,15 +39,13 @@ type Profile {
   id: ID!
   jobTitle: String!
   lastName: String!
-  profileSkills: [ProfileSkill!]!
   projects: [Project!]!
   resources: [ProfileResource!]!
-  skills: [Skill!]!
+  skills: [ProfileSkill!]!
 }
 
 type ProfileCount {
   experience: Int!
-  profileSkills: Int!
   projects: Int!
   resources: Int!
   skills: Int!
@@ -115,8 +113,6 @@ type Skill {
   _count: SkillCount!
   id: ID!
   name: String!
-  profile: Profile
-  profileId: Int
   profileSkills: [ProfileSkill!]!
 }
 

@@ -130,6 +130,21 @@ async function upsertExperience(tx: TransactionClient, profileId: number) {
     skipDuplicates: true,
   });
 
+  await updateMany(tx, {
+    tableName: 'Experience',
+    uniqueFields: ['profileId', 'companyId', 'startDate'],
+    updateFields: ['position', 'description', 'endDate'],
+    types: ['int', 'int', 'date', 'text', 'text', 'date'],
+    values: yamlProfile.experience.map((experience) => [
+      profileId,
+      companiesMap[experience.company],
+      experience.startDate,
+      experience.position,
+      experience.description,
+      experience.endDate ? new Date(experience.endDate).toISOString() : null,
+    ]),
+  });
+
   await tx.experience.deleteMany({
     where: { profileId, company: { name: { notIn: yamlProfile.experience.map(experience => experience.company) } } },
   });
@@ -139,7 +154,14 @@ async function upsertProjects(tx: TransactionClient, profileId: number) {
   await tx.project.createMany({
     data: yamlProfile.projects.map((project) => ({
       profileId,
-      ...project,
+      name: project.name,
+      description: project.description,
+      problem: project.problem,
+      solution: project.solution,
+      type: project.type,
+      url: project.url,
+      github: project.github,
+      role: project.role,
     })),
     skipDuplicates: true,
   });
@@ -147,8 +169,26 @@ async function upsertProjects(tx: TransactionClient, profileId: number) {
   await updateMany(tx, {
     tableName: 'Project',
     uniqueFields: ['profileId', 'name'],
-    updateFields: ['description', 'problem', 'solution', 'type', 'url', 'github', 'role'],
-    types: ['int', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text'],
+    updateFields: [
+      'description',
+      'problem',
+      'solution',
+      'type',
+      'url',
+      'github',
+      'role',
+    ],
+    types: [
+      'int',
+      'text',
+      'text',
+      'text',
+      'text',
+      '"ProjectType"',
+      'text',
+      'text',
+      '"Role"',
+    ],
     values: yamlProfile.projects.map((project) => [
       profileId,
       project.name,
@@ -159,7 +199,7 @@ async function upsertProjects(tx: TransactionClient, profileId: number) {
       project.url,
       project.github,
       project.role,
-    ])
+    ]),
   });
 
   await tx.project.deleteMany({

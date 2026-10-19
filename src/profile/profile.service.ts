@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../shared/services/prisma.service';
 import { PrismaSelect } from '../shared/lib/prisma-select';
 
@@ -15,7 +15,7 @@ export class ProfileService {
       relationLoadStrategy: 'join',
     });
     if (!profile) {
-      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Profile Not Found');
     }
     return profile;
   }

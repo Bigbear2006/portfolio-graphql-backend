@@ -55,7 +55,8 @@ model ProfileResource {
   resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  @@unique([resourceId, profileId])
+  @@unique([profileId, resourceId])
+  @@index([resourceId])
 }
 
 model Skill {
@@ -71,7 +72,8 @@ model ProfileSkill {
   skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  @@unique([skillId, profileId])
+  @@unique([profileId, skillId])
+  @@index([skillId])
 }
 
 model Company {
@@ -91,7 +93,8 @@ model Experience {
   company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
   profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  @@index([companyId, profileId])
+  @@unique([profileId, companyId, startDate])
+  @@index([companyId])
 }
 
 model Project {

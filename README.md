@@ -1,14 +1,16 @@
 # Portfolio GraphQL Backend
 
 GraphQL API для получения данных портфолио.
-Реализовано автозаполнение БД из файла `profile.yaml`,
+Реализовано идемпотентное автозаполнение БД из файла `profile.yaml`,
 автогенерация типов с помощью `prisma-nestjs-graphql`,
-оптимизация запросов (включая N+1) и ограничение глубины Query.
+оптимизация запросов к БД (включая N+1) и ограничение глубины Query.
 
 ## Запуск
 
 ```bash
 make
+# or
+make up
 # or
 docker-compose up --build -d
 
