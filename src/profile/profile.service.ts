@@ -15,8 +15,8 @@ export class ProfileService {
       relationLoadStrategy: 'join',
     });
     if (!profile) {
-      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND)
+      throw new HttpException('Profile Not Found', HttpStatus.NOT_FOUND);
     }
-    return profile
+    return profile;
   }
 }

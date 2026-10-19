@@ -21,9 +21,10 @@ import { join } from 'path';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       graphiql: false,
+      introspection: true,
+      validationRules: [depthLimit(3)],
       // @ts-ignore
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      validationRules: [depthLimit(3)]
     }),
     SharedModule,
     ProfileModule,

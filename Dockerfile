@@ -1,23 +1,11 @@
-FROM node:26-alpine AS builder
+FROM node:26-alpine
 
 WORKDIR /app
+
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm i
 
-COPY tsconfig.json tsconfig.build.json nest-cli.json ./
-COPY src ./src
-COPY prisma ./prisma
-
+COPY . .
 RUN npx prisma generate && npm run build
-RUN npm prune --omit=dev
-
-FROM node:26-alpine AS runner
-
-WORKDIR /app
-
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./
 
 ENTRYPOINT ["npm", "run", "start:prod"]

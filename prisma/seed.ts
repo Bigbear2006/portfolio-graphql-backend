@@ -139,12 +139,7 @@ async function upsertProjects(tx: TransactionClient, profileId: number) {
   await tx.project.createMany({
     data: yamlProfile.projects.map((project) => ({
       profileId,
-      name: project.name,
-      description: project.description,
-      type: project.type,
-      url: project.url,
-      github: project.github,
-      role: project.role,
+      ...project,
     })),
     skipDuplicates: true,
   });
@@ -152,14 +147,18 @@ async function upsertProjects(tx: TransactionClient, profileId: number) {
   await updateMany(tx, {
     tableName: 'Project',
     uniqueFields: ['profileId', 'name'],
-    updateFields: ['description', 'url', 'github'],
-    types: ['int', 'text', 'text', 'text', 'text'],
+    updateFields: ['description', 'problem', 'solution', 'type', 'url', 'github', 'role'],
+    types: ['int', 'text', 'text', 'text', 'text', 'text', 'text', 'text', 'text'],
     values: yamlProfile.projects.map((project) => [
       profileId,
       project.name,
       project.description,
+      project.problem,
+      project.solution,
+      project.type,
       project.url,
-      project.github
+      project.github,
+      project.role,
     ])
   });
 
